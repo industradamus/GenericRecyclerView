@@ -19,9 +19,7 @@ object ViewHolderFactory {
         override fun bind(data: Data, listener: OnItemClickListener<Data>?) {
             itemView.apply {
                 nameTextView.text = data.name
-                setOnClickListener {
-                    listener?.onClickItem(data)
-                }
+                setOnClickListener { listener?.onClickItem(data) }
             }
         }
     }

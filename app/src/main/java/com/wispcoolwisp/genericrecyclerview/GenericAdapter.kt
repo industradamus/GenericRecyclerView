@@ -1,6 +1,7 @@
 package com.wispcoolwisp.genericrecyclerview
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import androidx.recyclerview.widget.DiffUtil
@@ -19,7 +20,7 @@ abstract class GenericAdapter<T> : RecyclerView.Adapter<RecyclerView.ViewHolder>
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return ViewHolderFactory.create(
+        return getViewHolder(
             LayoutInflater.from(parent.context)
                 .inflate(viewType, parent, false)
             , viewType
@@ -53,6 +54,10 @@ abstract class GenericAdapter<T> : RecyclerView.Adapter<RecyclerView.ViewHolder>
     }
 
     protected abstract fun getLayoutId(position: Int, obj: T): Int
+
+    protected open fun getViewHolder(view: View, viewType: Int): RecyclerView.ViewHolder {
+        return ViewHolderFactory.create(view, viewType)
+    }
 
     internal interface Binder<T> {
         fun bind(data: T, listener: OnItemClickListener<T>?)
