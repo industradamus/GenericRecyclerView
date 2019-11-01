@@ -1,16 +1,18 @@
 package com.wispcoolwisp.genericrecyclerview
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import com.wispcoolwisp.genericrecyclerview.recycler.GenericAdapter
+import com.wispcoolwisp.genericrecyclerview.recycler.GenericItemDiff
+import com.wispcoolwisp.genericrecyclerview.recycler.viewholders.BaseViewHolder
+import com.wispcoolwisp.genericrecyclerview.recycler.viewholders.ViewHolderFactory
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : AppCompatActivity(), OnItemClickListener<SomeData> {
+class MainActivity : AppCompatActivity(),
+    GenericAdapter.OnItemClickListener<SomeData> {
 
     private lateinit var adapter: GenericAdapter<SomeData>
 
@@ -39,6 +41,8 @@ class MainActivity : AppCompatActivity(), OnItemClickListener<SomeData> {
     }
 
     private val dataAdapter = object : GenericAdapter<SomeData>(this) {
+        override fun getItemId(position: Int): Long = getItem(position).item.id.toLong()
+
         override fun getLayoutId(position: Int, obj: SomeData): Int =
             when (obj) {
                 is Data -> R.layout.item_data
@@ -46,7 +50,7 @@ class MainActivity : AppCompatActivity(), OnItemClickListener<SomeData> {
                 else -> R.layout.item_data
             }
 
-        override fun getViewHolder(view: View, viewType: Int): RecyclerView.ViewHolder {
+        override fun getViewHolder(view: View, viewType: Int): BaseViewHolder<*> {
             return when (viewType) {
                 R.layout.item_data -> ViewHolderFactory.DataViewHolder(view)
                 R.layout.item_other_data -> ViewHolderFactory.OtherDataViewHolder(view)
@@ -56,7 +60,8 @@ class MainActivity : AppCompatActivity(), OnItemClickListener<SomeData> {
     }
 }
 
-private val diffUtil = object : GenericItemDiff<SomeData> {
+private val diffUtil = object :
+    GenericItemDiff<SomeData> {
     override fun isSame(
         oldItems: List<SomeData>,
         newItems: List<SomeData>,

@@ -1,4 +1,4 @@
-package com.wispcoolwisp.genericrecyclerview
+package com.wispcoolwisp.genericrecyclerview.recycler
 
 import androidx.recyclerview.widget.DiffUtil
 
